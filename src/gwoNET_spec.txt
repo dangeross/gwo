@@ -1,0 +1,75 @@
+GwoNET Specification
+====================
+
+Purpose
+-------
+
+To create a means of connection between three sources globally to each other. 
+The three sources are:
+	GwoNET : GwoNET <--> User & Server Info
+	User   : User <-- Server Info (via GwoNET), 
+		 User --> GwoNET (Register/Server list)
+	Server : Server <-- User Info (via GwoNET), 
+		 Server --> GwoNET (User stats)
+		 
+Any GwoNET stored data can then be used on the GwoNET website.  On the website it also should be possible for regular forum members to register a UID or link their UID to their forum ID.  Once this is done GwoNET stats can then be displayed next to say a members post.  For example, current server playing on or league could be displayed.
+	
+SQL Table Design
+----------------
+
+User Data Table:
+
+CORE INFO: UID (int) [primkey], password (string), name (string), 
+	server (string), online (bool)
+LEAGUE INFO: played (int), won (int), drawn (int), lost (int), kills (int), 
+	hits (int), points (int)
+	
+Server Data Table:
+
+SID (int), name (string)
+
+Requirments List
+----------------
+
+REQ_C1:USER_REGISTRATION
+
+To play GWO each user must have a valid unique UID.  To obtain this a message is sent to GwoNET to obtain a new UID.  The message will be "cmdId=301&uid=0&name=xxxx&password=yyyy" and the data returned is the new UID "123456".  If the user already exists the UID and password can be sent, if they match the same UID is returned.  The user can then login to any server using this UID and password.
+
+REQ_C2:SERVER_LIST_REQUEST
+
+The user can collect a list of available servers to connect to from GwoNET.  Message sent is "cmdId=302" and data returned is a newline seperated list of
+servers online.  For example, "gwo-server.homeip.net\n283.231.123.3\n".
+
+REQ_S1:SERVER_ONLINE
+
+When a server is started it attempts to connect to GwoNET to register itself.  The message sent is "cmdId=401&name=xxx.xxx.xxx.xxx" and data returned is the servers registered/generated unique SID "123456".  The SID sent is then using by the  server to perform further updates.  The name sent can be a URL or IP when the server is located.  GwoNET first tests the server name sent to see if it is a  valid server, adds server element to table and then returns the SID.
+
+REQ_S2:SERVER_ADDRESS_UPDATE
+
+Server IP address changes.  Message sent is "cmdId=402&sid=888888&name=yyy.yyy.yyy.yyy" and no data is returned.
+
+REQ_S3:SERVER_OFFLINE
+
+Server is shut down.  Message sent is "cmdId=403&sid=888888" and no data is
+returned.  GwoNET should also check/set any users connected to this server to offline.  Remove server element from table.
+
+REQ_S4:USER_ONLINE
+
+When a user attempts login to a server a request is sent to GwoNET to validate the UID and password.  Message sent is
+"cmdId=404&sid=888888&uid=999999&name=wwwwww&password=zzzz".  Data returned is  "OK" if password is valid AND user is not online, or "FAILED" if password is invalid OR user is online.  GwoNET then updates the user info (name=name, online=true, server=sid)
+
+REQ_S5:LEAGUE_UPDATE
+
+Update of league tables.  Not 100% sure how to handle this yet.  Either sending one message to GwoNET with all data
+"cmdId=405&sid=888888&num=3&
+	uid1=999999&won1=0&drawn1=0&lost1=0&kills1=0&hits1=0&points1=0&
+	uid2=999999&won2=0&drawn2=0&lost2=0&kills2=0&hits2=0&points2=0&
+	uid3=999999&won3=0&drawn3=0&lost3=0&kills3=0&hits3=0&points3=0"	
+or to send a message for each user
+"cmdId=405&sid=888888&
+	uid=999999&won=0&drawn=0&lost=0&kills=0&hits=0&points=0"
+and no data is returned.  This data is sent each time a game finishes for all users playing.
+
+REQ_S6:USER_OFFLINE
+
+When a user disconnects from a server.  Message sent "cmdId=406&sid=888888&uid=999999" and no data is returned.  GwoNET then updates the user info (online=false, server="")

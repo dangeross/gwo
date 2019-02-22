@@ -1,0 +1,103 @@
+* countdown for dead players fix
+* rambo / massacare
+/ time to live
+missile looks crap
+* team talk
+* server reset
+radar
+anti-flood
+ignore
+* teams no faitality award bug
+* find uid
+* watch no fire
+* check team points
+* check team awards
+* check watch
+
+user cmds:
+vote_kick(60%) *vote_game *vote_draw *team
+
+admin cmds:
+*kick *ban nuke say ip
+
+* cron job, gwonet server checking
+
+* port selectable
+
+* volume control
+
+server email GwoNet status
+
+add online(bool) to league.  save every online/offline/game.  if online on startup, set to offline
+
+* mine awards problems (no won/kills)
+
+
+(leave for now) rewrite awards
+
+
+* timeout on game
+* title req
+* 0.0% power
+
+* check 12:00
+* test teams selection
+(leave for now) reset user details
+* check team awards...again
+* watch button on startup
+(leave for now) /name
+* hyper fix
+
+bold txt
+finished timeout
+* check join (usersPlaying)
+
+* kick idlers
+* how did u win (-2)
+* gravity change
+* worm kill
+* mine kill?
+* updater fix
+
+uid deleting
+
+* blank name
+* get uid
+* bottom status shade
+? black holes super fast nono
+
+handle connect timeout for gwonet update
+
+next version (2.0.32)
+---------------------
+
+* disable /priv /team msgs during mystery round.
+* fix quit problem
+* /priv msgs bot reply
+* msg bar save to friendly
+* screensize of 800x600
+
+* login status more detail
+* server list more detailed
+* new server listing
+remove members never logged in within a month (maybe)
+* auto correcting of refresh via server timing
+* show preusers online
+* fix player color when dead and new user watches
+* bullet life
+* gwo updater fix
+* add connection debug window
+* add name check return
+* more detailed GwoNET related login failures
+* server reconnect to GwoNET if removed for connection problems
+* add maximum players option on server
+
+2.0.33
+------
+un auto_join midgame
+change reroute stuff (move servers to none dyndns) remove dyndns functions
+
+further dev
+-----------
+invite only servers
+pings on server
